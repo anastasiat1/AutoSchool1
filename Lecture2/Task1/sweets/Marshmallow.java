@@ -2,7 +2,9 @@ package sweets;
 
 public class Marshmallow extends Sweets {
 
-    public Marshmallow(String name, double cost, double weight, String type){
+    private static String type = "Marshmallow";
+
+    public Marshmallow(String name, double cost, double weight){
         super(name, cost, weight, type);
     }
 
@@ -13,7 +15,7 @@ public class Marshmallow extends Sweets {
 
     @Override
     public String toString(){
-        return String.format("\nSweets type: %s ", type + super.toString());
+        return super.getSweetsData();
     }
 
 }
