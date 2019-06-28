@@ -2,19 +2,18 @@ package sweets;
 
 public class Candy extends Sweets {
 
-    public Candy(String name, double cost, double weight, String type){
+    private static String type ="Candy";
+
+    public Candy(String name, double cost, double weight){
         super(name, cost, weight, type);
     }
 
-    @Override
     public void eat() {
-        System.out.println("Eat candies!");
-    }
-
+        System.out.println("Eat cookie!");}
 
     @Override
     public String toString(){
-        return String.format("\nSweets type: %s ", type + super.toString());
+        return super.getSweetsData();
     }
 
 }

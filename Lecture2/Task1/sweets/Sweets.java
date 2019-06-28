@@ -5,16 +5,14 @@ public abstract class Sweets implements Comparable  {
     private	String name;
     private double cost;
     private double weight;
-    protected String type;
+    public String type;
 
-    public Sweets(String name, double cost, double weight, String type){
+    public Sweets(String name, double cost, double weight, String type) {
         this.name = name;
         this.cost = cost;
         this.weight = weight;
         this.type = type;
     }
-
-    public abstract void eat();
 
     public String getName() {
         return name;
@@ -24,9 +22,10 @@ public abstract class Sweets implements Comparable  {
         return weight;
     }
 
-    @Override
-    public String toString() {
-        return String.format("|Name: %s |Cost: %.1f |Weight: %.1f, %s", name, cost, weight, type);
+    public abstract void eat();
+
+    public String getSweetsData () {
+        return String.format("\nType: %s, Name: %s, Cost: %.1f, Weight: %.1f", type, name, cost, weight);
     }
 
     public int compareTo(Object obj) {
