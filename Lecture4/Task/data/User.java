@@ -1,8 +1,8 @@
 package data;
 
 public class User {
-    String email = "tereshko@gmail.com";
-    String password = "111511";
+    String email;
+    String password;
     String id;
     String registeredAt;
 
@@ -23,7 +23,6 @@ public class User {
     }
 
     public User(){
-
     }
 
     public User(String email, String password){
@@ -37,10 +36,6 @@ public class User {
 
     public String getPassword() {
         return password;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public void setPassword(String password) {
