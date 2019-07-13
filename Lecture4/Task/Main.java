@@ -1,7 +1,7 @@
-import utils.Authorization;
+import data.NoteDto;
+import data.UserDto;
+import utils.ClientAuthorization;
 import utils.NotesService;
-import data.OAuth2_Token;
-import data.User;
 
 import java.io.IOException;
 
@@ -9,18 +9,20 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        Authorization authorization = new Authorization();
-        NotesService restClient = new NotesService();
-        User registeredUser = restClient.registerUser(System.currentTimeMillis() + "test@m.by", "178234");
-        OAuth2_Token token = authorization.getOAuth2Token(registeredUser);
+        ClientAuthorization authorization = new ClientAuthorization();
+        NotesService notesService = new NotesService();
+        String email = System.currentTimeMillis() + "test@m.by";
+        String password = "178234";
+        UserDto registeredUser = notesService.registerUser(email, password);
+        authorization.getOAuth2Token(registeredUser);
         System.out.println("First note creation: ");
-        restClient.createNote(token, "111111111");
+        notesService.createNote(registeredUser, "111111111");
         System.out.println("Second note creation: ");
-        restClient.createNote(token, "2222222222");
-        restClient.getAllNotes(token);
-        restClient.getNote(token);
-        restClient.updateNote(token,"33333");
-        restClient.deleteNote(token);
-        restClient.getAllNotes(token);
+        notesService.createNote(registeredUser, "2222222222");
+        NoteDto[] note = notesService.getAllNotes(registeredUser);
+        notesService.getNote(registeredUser, note[1]);
+        notesService.updateNote(registeredUser,"33333", note[0]);
+        notesService.deleteNote(registeredUser, note[1]);
+        notesService.getAllNotes(registeredUser);
     }
 }

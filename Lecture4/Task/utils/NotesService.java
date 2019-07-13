@@ -1,65 +1,94 @@
 package utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import data.Note;
-import data.OAuth2_Token;
-import data.User;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import data.NoteDto;
+import data.UserDto;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class NotesService {
 
     private ObjectMapper mapper = new ObjectMapper();
+    ObjectNode node = mapper.createObjectNode();
     private RequestExecutor execute = new RequestExecutor();
 
-    public Note[] getAllNotes(OAuth2_Token token) throws IOException {
+    public NoteDto[] getAllNotes(UserDto user) throws IOException {
         System.out.println("Your notes are: ");
-        Note[] note = mapper.readValue(execute.getOrDelete(Constant.getAllCreateNotesURL, token, "Get"), Note[].class);
-        for (Note noteInfo : note) {
+        HashMap<String, String> headers = new HashMap();
+        headers.put("Content-Type", "application/json;charset=UTF-8");
+        headers.put("Authorization", "Bearer " + user.getToken());
+        NoteDto[] note = mapper.readValue(execute.get(Constant.getNotesURL, headers), NoteDto[].class);
+        for (NoteDto noteInfo : note) {
             System.out.println("Id: " + noteInfo.getId() + " Note: " + noteInfo.getContent());
         }
         return note;
     }
 
-    public User registerUser(String email, String password) throws IOException {
+    public UserDto registerUser(String email, String password) throws IOException {
         System.out.println("User's registration: ");
-        String responseString = execute.post(Constant.registerURL, email, password, "registration");
+        HashMap<String, String> headers = new HashMap();
+        headers.put("Content-Type", "application/json;charset=UTF-8");
+        node.put("email", email);
+        node.put("password", password);
+        String JSON_STRING = node.toString();
+        String responseString = execute.post(Constant.registerURL, "registration", headers, JSON_STRING);
         JSONObject responseJson = new JSONObject(responseString);
         System.out.println("Response JSON from API ------> " + responseJson);
-        User resultUser = mapper.readValue(responseString, User.class);
+        UserDto resultUser = mapper.readValue(responseString, UserDto.class);
         resultUser.setPassword(password);
         return resultUser;
     }
 
-    public Note createNote(OAuth2_Token token, String note) throws IOException {
-        String responseString = execute.post(token, Constant.getAllCreateNotesURL, note, "createNote");
+    public NoteDto createNote(UserDto user, String note) throws IOException {
+        HashMap<String, String> headers = new HashMap();
+        headers.put("Content-Type", "application/json;charset=UTF-8");
+        headers.put("Authorization", "Bearer " + user.getToken());
+        node.put("content", note);
+        String JSON_STRING = node.toString();
+        String responseString = execute.post(Constant.getNotesURL, "createNote", headers, JSON_STRING);
         JSONObject responseJson = new JSONObject(responseString);
         System.out.println("Response JSON from API ------> " + responseJson);
-        Note resultNote = mapper.readValue(responseString, Note.class);
+        NoteDto resultNote = mapper.readValue(responseString, NoteDto.class);
         System.out.println("Your new note is: " + resultNote.getContent());
         return resultNote;
     }
 
-    public Note getNote(OAuth2_Token token) throws IOException {
+    public NoteDto getNote(UserDto user, NoteDto note) throws IOException {
+        HashMap<String, String> headers = new HashMap();
+        headers.put("Content-Type", "application/json;charset=UTF-8");
+        headers.put("Authorization", "Bearer " + user.getToken());
+        String url = Constant.getNotesURL + "/" + note.getId();
         System.out.println("Your notes is: ");
-        Note note = mapper.readValue(execute.getOrDelete(Constant.getNoteURL,token, "Get"), Note.class);
+        note = mapper.readValue(execute.get(url, headers), NoteDto.class);
         System.out.println("Id: " + note.getId() + " Note: " + note.getContent());
         return note;
     }
 
-    public Note updateNote(OAuth2_Token token, String newText) throws IOException {
+    public NoteDto updateNote(UserDto user, String newText, NoteDto note) throws IOException {
+        String url = Constant.getNotesURL + "/" + note.getId();
         System.out.println("Updating of Note: ");
-        String responseString = execute.put(Constant.deleteUpdateURL, newText, token);
+        HashMap<String, String> headers = new HashMap();
+        headers.put("Content-Type", "application/json;charset=UTF-8");
+        headers.put("Authorization", "Bearer " + user.getToken());
+        node.put("content", newText);
+        String JSON_STRING = node.toString();
+        String responseString = execute.put(url, headers, JSON_STRING);
         JSONObject responseJson = new JSONObject(responseString);
         System.out.println("Response JSON from API ------> " + responseJson);
-        Note updatedNote = mapper.readValue(responseString, Note.class);
-        System.out.println("Id: " + updatedNote.getId() + " Data.Note: " + updatedNote.getContent());
-        return updatedNote;
+        note = mapper.readValue(responseString, NoteDto.class);
+        note.getNoteData();
+        return note;
     }
 
-    public void deleteNote(OAuth2_Token token) throws IOException {
-        execute.getOrDelete(Constant.deleteUpdateURL, token, "Delete");
+    public void deleteNote(UserDto user, NoteDto note) throws IOException {
+        String url = Constant.getNotesURL + "/" + note.getId();
+        HashMap<String, String> headers = new HashMap();
+        headers.put("Content-Type", "application/json;charset=UTF-8");
+        headers.put("Authorization", "Bearer " + user.getToken());
+        execute.delete(url, headers);
         System.out.println("Note was deleted");
     }
 }

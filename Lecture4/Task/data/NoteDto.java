@@ -1,13 +1,13 @@
 package data;
 
-public class Note {
+public class NoteDto {
     private String content;
     private String createdAt;
     private int id;
     private String modifiedAt;
     private int version;
 
-    public Note() {
+    public NoteDto() {
     }
 
     public String getContent() {
@@ -48,5 +48,9 @@ public class Note {
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    public String getNoteData () {
+        return String.format("\nId: %d, Note: %s", id, content);
     }
 }
