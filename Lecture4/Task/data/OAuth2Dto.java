@@ -1,12 +1,12 @@
 package data;
 
-public class OAuth2_Token {
+public class OAuth2Dto {
     private String access_token;
     private String token_type;
     private int expires_in;
     private String scope;
 
-    public OAuth2_Token(){
+    public OAuth2Dto(){
     }
 
     public String getAccess_token() {

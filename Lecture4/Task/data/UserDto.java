@@ -1,10 +1,19 @@
 package data;
 
-public class User {
+public class UserDto {
     String email;
     String password;
     String id;
     String registeredAt;
+    String usersToken;
+
+    public String getToken() {
+        return usersToken;
+    }
+
+    public void setToken(String usersToken) {
+        this.usersToken = usersToken;
+    }
 
     public String getId() {
         return id;
@@ -22,12 +31,13 @@ public class User {
         this.registeredAt = registeredAt;
     }
 
-    public User(){
+    public UserDto(){
     }
 
-    public User(String email, String password){
+    public UserDto(String email, String password, String usersToken){
         this.email = email;
         this.password = password;
+        this.usersToken = usersToken;
     }
 
     public String getEmail() {
@@ -41,4 +51,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
 }

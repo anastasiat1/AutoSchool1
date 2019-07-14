@@ -1,9 +1,5 @@
 package utils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import data.OAuth2_Token;
-import data.User;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.*;
@@ -18,92 +14,65 @@ import java.util.HashMap;
 import java.util.List;
 
 class RequestExecutor {
-    private ObjectMapper mapper = new ObjectMapper();
-    ObjectNode node = mapper.createObjectNode();
 
-    private String post(String url, String email, String password, User user, OAuth2_Token token, String note, String type) throws IOException {
+    private String post(String url, HashMap headers, List formData, String JSON_STRING) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(url);
-        if (token.getAccess_token() == null){
-            for (HashMap.Entry entry : Helper.createHeadersHashMapWithoutToken(type).entrySet()) {
-                httpPost.setHeader(entry.getKey().toString(), entry.getValue().toString());
-            }
+        for (HashMap.Entry entry : (Iterable<HashMap.Entry>) headers.entrySet()) {
+            httpPost.setHeader(entry.getKey().toString(), entry.getValue().toString());
         }
-        else {
-            for (HashMap.Entry entry : Helper.createHeadersHashMap(token).entrySet()) {
-                httpPost.setHeader(entry.getKey().toString(), entry.getValue().toString());
-            }
-        }
-        if (email != null && password != null) {
-            node.put("email", email);
-            node.put("password", password);
-            String JSON_STRING = node.toString();
-            httpPost.setEntity(new StringEntity(JSON_STRING, ContentType.APPLICATION_JSON));
-        }
-        if (token.getAccess_token() != null && note != null){
-            node.put("content", note);
-            String JSON_STRING = node.toString();
-            httpPost.setEntity(new StringEntity(JSON_STRING, ContentType.APPLICATION_JSON));
-        }
-        if (user.getEmail() != null) {
-            List formData = Helper.createFormDataList(user);
+        if (formData != null) {
             httpPost.setEntity(new UrlEncodedFormEntity(formData, "UTF-8"));
         }
+        else{
+            httpPost.setEntity(new StringEntity(JSON_STRING, ContentType.APPLICATION_JSON));
+        }
         CloseableHttpResponse closeableHttpResponse = httpClient.execute(httpPost);
-        Helper.getStatusCode(closeableHttpResponse);
+        RequestExecutorHelper.getStatusCode(closeableHttpResponse);
         return EntityUtils.toString(closeableHttpResponse.getEntity(), "UTF-8");
     }
 
-    String post(String url, String email, String password, String type) throws IOException {
-        String note = null;
-        return post(url, email, password, new User(), new OAuth2_Token(), note, type);
+    public String post(String url, HashMap headers, String JSON_STRING) throws IOException {
+        List formData = null;
+        return post(url, headers, formData, JSON_STRING);
     }
 
-    String post(String url, User user, String type) throws IOException {
-        String note = null;
-        String email = null;
-        String password = null;
-        return post(url, email, password, user, new OAuth2_Token(), note, type);
+    public String post(String url, HashMap headers, List formData) throws IOException {
+        String JSON_STRING = null;
+        return post(url, headers, formData, JSON_STRING);
     }
 
-    String post(OAuth2_Token token, String url, String note, String type) throws IOException {
-        String email = null;
-        String password = null;
-        return post(url, email, password, new User(), token, note, type);
-    }
-
-    String put(String url, String note, OAuth2_Token token) throws IOException {
+    public String put(String url, HashMap headers, String JSON_STRING) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpEntityEnclosingRequestBase httpPut = new HttpPut(url);
-        for (HashMap.Entry entry : Helper.createHeadersHashMap(token).entrySet()) {
+        for (HashMap.Entry entry : (Iterable<HashMap.Entry>) headers.entrySet()) {
             httpPut.setHeader(entry.getKey().toString(), entry.getValue().toString());
         }
-        node.put("content", note);
-        String JSON_STRING = node.toString();
         httpPut.setEntity(new StringEntity(JSON_STRING, ContentType.APPLICATION_JSON));
-        System.out.println("Create new note: ");
         CloseableHttpResponse closeableHttpResponse = httpClient.execute(httpPut);
-        Helper.getStatusCode(closeableHttpResponse);
+        RequestExecutorHelper.getStatusCode(closeableHttpResponse);
         return EntityUtils.toString(closeableHttpResponse.getEntity(), "UTF-8");
     }
 
-    String getOrDelete(String url, OAuth2_Token token, String type) throws IOException  {
+    public String get(String url, HashMap headers) throws IOException  {
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpRequestBase method = null;
-        if (type.equals("Delete")) {
-            method = new HttpDelete(url);
-        } else if (type.equals("Get")) {
-            method = new HttpGet(url);
+        HttpRequestBase httpGet = new HttpGet(url);
+        for (HashMap.Entry entry : (Iterable<HashMap.Entry>) headers.entrySet()) {
+            httpGet.setHeader(entry.getKey().toString(), entry.getValue().toString());
         }
-        for (HashMap.Entry entry : Helper.createHeadersHashMap(token).entrySet()) {
-            method.setHeader(entry.getKey().toString(), entry.getValue().toString());
-        }
-        CloseableHttpResponse closeableHttpResponse = httpClient.execute(method);
-        Helper.getStatusCode(closeableHttpResponse);
+        CloseableHttpResponse closeableHttpResponse = httpClient.execute(httpGet);
+        RequestExecutorHelper.getStatusCode(closeableHttpResponse);
         HttpEntity entity = closeableHttpResponse.getEntity();
-        if (entity != null){
-            return EntityUtils.toString(entity);
+        return EntityUtils.toString(entity);
+    }
+
+    public static void delete(String url, HashMap headers) throws IOException  {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpRequestBase httpDelete = new HttpDelete(url);
+        for (HashMap.Entry entry : (Iterable<HashMap.Entry>) headers.entrySet()) {
+            httpDelete.setHeader(entry.getKey().toString(), entry.getValue().toString());
         }
-        return null;
+        CloseableHttpResponse closeableHttpResponse = httpClient.execute(httpDelete);
+        RequestExecutorHelper.getStatusCode(closeableHttpResponse);
     }
 }
