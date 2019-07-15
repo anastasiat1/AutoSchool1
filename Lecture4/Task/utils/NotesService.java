@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class NotesService {
 
@@ -17,12 +18,10 @@ public class NotesService {
 
     public NoteDto[] getAllNotes(UserDto user) throws IOException {
         System.out.println("Your notes are: ");
-        HashMap<String, String> headers = new HashMap();
-        headers.put("Content-Type", "application/json;charset=UTF-8");
-        headers.put("Authorization", "Bearer " + user.getToken());
+        HashMap<String, String> headers = setHeaders(user);
         NoteDto[] note = mapper.readValue(execute.get(Constant.getNotesURL, headers), NoteDto[].class);
         for (NoteDto noteInfo : note) {
-            System.out.println("Id: " + noteInfo.getId() + " Note: " + noteInfo.getContent());
+            System.out.println(noteInfo.getNoteData());
         }
         return note;
     }
@@ -30,12 +29,12 @@ public class NotesService {
     public UserDto registerUser(String email, String password) throws IOException {
         ClientAuthorization authorization = new ClientAuthorization();
         System.out.println("User's registration: ");
-        HashMap<String, String> headers = new HashMap();
+        Map<String, String> headers = new HashMap();
         headers.put("Content-Type", "application/json;charset=UTF-8");
         node.put("email", email);
         node.put("password", password);
-        String JSON_STRING = node.toString();
-        String responseString = execute.post(Constant.registerURL, headers, JSON_STRING);
+        String jsonString = node.toString();
+        String responseString = execute.post(Constant.registerURL, headers, jsonString);
         JSONObject responseJson = new JSONObject(responseString);
         System.out.println("Response JSON from API ------> " + responseJson);
         UserDto resultUser = mapper.readValue(responseString, UserDto.class);
@@ -45,12 +44,10 @@ public class NotesService {
     }
 
     public NoteDto createNote(UserDto user, String note) throws IOException {
-        HashMap<String, String> headers = new HashMap();
-        headers.put("Content-Type", "application/json;charset=UTF-8");
-        headers.put("Authorization", "Bearer " + user.getToken());
         node.put("content", note);
-        String JSON_STRING = node.toString();
-        String responseString = execute.post(Constant.getNotesURL, headers, JSON_STRING);
+        String jsonString = node.toString();
+        HashMap<String, String> headers = setHeaders(user);
+        String responseString = execute.post(Constant.getNotesURL, headers, jsonString);
         JSONObject responseJson = new JSONObject(responseString);
         System.out.println("Response JSON from API ------> " + responseJson);
         NoteDto resultNote = mapper.readValue(responseString, NoteDto.class);
@@ -59,25 +56,21 @@ public class NotesService {
     }
 
     public NoteDto getNote(UserDto user, NoteDto note) throws IOException {
-        HashMap<String, String> headers = new HashMap();
-        headers.put("Content-Type", "application/json;charset=UTF-8");
-        headers.put("Authorization", "Bearer " + user.getToken());
+        HashMap<String, String> headers = setHeaders(user);
         String url = Constant.getNotesURL + "/" + note.getId();
         System.out.println("Your notes is: ");
         note = mapper.readValue(execute.get(url, headers), NoteDto.class);
-        System.out.println("Id: " + note.getId() + " Note: " + note.getContent());
+        System.out.println(note);
         return note;
     }
 
     public NoteDto updateNote(UserDto user, String newText, NoteDto note) throws IOException {
         String url = Constant.getNotesURL + "/" + note.getId();
         System.out.println("Updating of Note: ");
-        HashMap<String, String> headers = new HashMap();
-        headers.put("Content-Type", "application/json;charset=UTF-8");
-        headers.put("Authorization", "Bearer " + user.getToken());
+        HashMap<String, String> headers = setHeaders(user);
         node.put("content", newText);
-        String JSON_STRING = node.toString();
-        String responseString = execute.put(url, headers, JSON_STRING);
+        String jsonString = node.toString();
+        String responseString = execute.put(url, headers, jsonString);
         JSONObject responseJson = new JSONObject(responseString);
         System.out.println("Response JSON from API ------> " + responseJson);
         note = mapper.readValue(responseString, NoteDto.class);
@@ -87,10 +80,15 @@ public class NotesService {
 
     public void deleteNote(UserDto user, NoteDto note) throws IOException {
         String url = Constant.getNotesURL + "/" + note.getId();
+        HashMap<String, String> headers = setHeaders(user);
+        execute.delete(url, headers);
+        System.out.println("Note was deleted");
+    }
+
+    private HashMap<String, String> setHeaders(UserDto user){
         HashMap<String, String> headers = new HashMap();
         headers.put("Content-Type", "application/json;charset=UTF-8");
         headers.put("Authorization", "Bearer " + user.getToken());
-        execute.delete(url, headers);
-        System.out.println("Note was deleted");
+        return headers;
     }
 }

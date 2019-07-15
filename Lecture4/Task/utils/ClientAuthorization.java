@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ClientAuthorization {
 
@@ -17,7 +18,7 @@ public class ClientAuthorization {
     private RequestExecutor execute = new RequestExecutor();
 
     public OAuth2Dto getOAuth2Token(UserDto user) throws IOException {
-        HashMap<String, String> headers = new HashMap();
+        Map<String, String> headers = new HashMap();
         headers.put("Content-Type", "application/x-www-form-urlencoded");
         headers.put("Authorization", "Basic Y2xpZW50OnNlY3JldA==");
         List formData = new ArrayList<>();

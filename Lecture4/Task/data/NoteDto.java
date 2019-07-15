@@ -51,6 +51,6 @@ public class NoteDto {
     }
 
     public String getNoteData () {
-        return String.format("\nId: %d, Note: %s", id, content);
+        return String.format("Id: %d, Note: %s", id, content);
     }
 }
