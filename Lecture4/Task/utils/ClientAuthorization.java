@@ -25,7 +25,7 @@ public class ClientAuthorization {
         formData.add(new BasicNameValuePair("scope", "read write"));
         formData.add(new BasicNameValuePair("username", user.getEmail()));
         formData.add(new BasicNameValuePair("password", user.getPassword()));
-        String responseString = execute.post(Constant.getTokenURL, "authorization", headers, formData);
+        String responseString = execute.post(Constant.getTokenURL, headers, formData);
         JSONObject responseJson = new JSONObject(responseString);
         System.out.println("Response JSON from API ------> " + responseJson);
         OAuth2Dto resultToken = mapper.readValue(responseString, OAuth2Dto.class);

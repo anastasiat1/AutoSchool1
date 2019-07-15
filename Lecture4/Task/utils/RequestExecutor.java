@@ -15,13 +15,13 @@ import java.util.List;
 
 class RequestExecutor {
 
-    private String post(String url, String type, HashMap headers, List formData, String JSON_STRING) throws IOException {
+    private String post(String url, HashMap headers, List formData, String JSON_STRING) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(url);
         for (HashMap.Entry entry : (Iterable<HashMap.Entry>) headers.entrySet()) {
             httpPost.setHeader(entry.getKey().toString(), entry.getValue().toString());
         }
-        if (type.equals("authorization")) {
+        if (formData != null) {
             httpPost.setEntity(new UrlEncodedFormEntity(formData, "UTF-8"));
         }
         else{
@@ -32,14 +32,14 @@ class RequestExecutor {
         return EntityUtils.toString(closeableHttpResponse.getEntity(), "UTF-8");
     }
 
-    public String post(String url, String type, HashMap headers, String JSON_STRING) throws IOException {
+    public String post(String url, HashMap headers, String JSON_STRING) throws IOException {
         List formData = null;
-        return post(url, type, headers, formData, JSON_STRING);
+        return post(url, headers, formData, JSON_STRING);
     }
 
-    public String post(String url, String type, HashMap headers, List formData) throws IOException {
+    public String post(String url, HashMap headers, List formData) throws IOException {
         String JSON_STRING = null;
-        return post(url, type, headers, formData, JSON_STRING);
+        return post(url, headers, formData, JSON_STRING);
     }
 
     public String put(String url, HashMap headers, String JSON_STRING) throws IOException {

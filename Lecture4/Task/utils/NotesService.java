@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class NotesService {
 
     private ObjectMapper mapper = new ObjectMapper();
-    ObjectNode node = mapper.createObjectNode();
+    private ObjectNode node = mapper.createObjectNode();
     private RequestExecutor execute = new RequestExecutor();
 
     public NoteDto[] getAllNotes(UserDto user) throws IOException {
@@ -28,17 +28,19 @@ public class NotesService {
     }
 
     public UserDto registerUser(String email, String password) throws IOException {
+        ClientAuthorization authorization = new ClientAuthorization();
         System.out.println("User's registration: ");
         HashMap<String, String> headers = new HashMap();
         headers.put("Content-Type", "application/json;charset=UTF-8");
         node.put("email", email);
         node.put("password", password);
         String JSON_STRING = node.toString();
-        String responseString = execute.post(Constant.registerURL, "registration", headers, JSON_STRING);
+        String responseString = execute.post(Constant.registerURL, headers, JSON_STRING);
         JSONObject responseJson = new JSONObject(responseString);
         System.out.println("Response JSON from API ------> " + responseJson);
         UserDto resultUser = mapper.readValue(responseString, UserDto.class);
         resultUser.setPassword(password);
+        authorization.getOAuth2Token(resultUser);
         return resultUser;
     }
 
@@ -48,7 +50,7 @@ public class NotesService {
         headers.put("Authorization", "Bearer " + user.getToken());
         node.put("content", note);
         String JSON_STRING = node.toString();
-        String responseString = execute.post(Constant.getNotesURL, "createNote", headers, JSON_STRING);
+        String responseString = execute.post(Constant.getNotesURL, headers, JSON_STRING);
         JSONObject responseJson = new JSONObject(responseString);
         System.out.println("Response JSON from API ------> " + responseJson);
         NoteDto resultNote = mapper.readValue(responseString, NoteDto.class);
