@@ -19,7 +19,7 @@ public class NotesService {
     public NoteDto[] getAllNotes(UserDto user) throws IOException {
         System.out.println("Your notes are: ");
         HashMap<String, String> headers = setHeaders(user);
-        NoteDto[] note = mapper.readValue(execute.get(Constant.getNotesURL, headers), NoteDto[].class);
+        NoteDto[] note = mapper.readValue(execute.get(Constant.GET_NOTES_URL, headers), NoteDto[].class);
         for (NoteDto noteInfo : note) {
             System.out.println(noteInfo.getNoteData());
         }
@@ -34,12 +34,12 @@ public class NotesService {
         node.put("email", email);
         node.put("password", password);
         String jsonString = node.toString();
-        String responseString = execute.post(Constant.registerURL, headers, jsonString);
+        String responseString = execute.post(Constant.REGISTER_URL, headers, jsonString);
         JSONObject responseJson = new JSONObject(responseString);
         System.out.println("Response JSON from API ------> " + responseJson);
         UserDto resultUser = mapper.readValue(responseString, UserDto.class);
         resultUser.setPassword(password);
-        authorization.getOAuth2Token(resultUser);
+        authorization.authorize(resultUser);
         return resultUser;
     }
 
@@ -47,7 +47,7 @@ public class NotesService {
         node.put("content", note);
         String jsonString = node.toString();
         HashMap<String, String> headers = setHeaders(user);
-        String responseString = execute.post(Constant.getNotesURL, headers, jsonString);
+        String responseString = execute.post(Constant.GET_NOTES_URL, headers, jsonString);
         JSONObject responseJson = new JSONObject(responseString);
         System.out.println("Response JSON from API ------> " + responseJson);
         NoteDto resultNote = mapper.readValue(responseString, NoteDto.class);
@@ -57,7 +57,7 @@ public class NotesService {
 
     public NoteDto getNote(UserDto user, NoteDto note) throws IOException {
         HashMap<String, String> headers = setHeaders(user);
-        String url = Constant.getNotesURL + "/" + note.getId();
+        String url = Constant.GET_NOTES_URL + "/" + note.getId();
         System.out.println("Your notes is: ");
         note = mapper.readValue(execute.get(url, headers), NoteDto.class);
         System.out.println(note);
@@ -65,7 +65,7 @@ public class NotesService {
     }
 
     public NoteDto updateNote(UserDto user, String newText, NoteDto note) throws IOException {
-        String url = Constant.getNotesURL + "/" + note.getId();
+        String url = Constant.GET_NOTES_URL + "/" + note.getId();
         System.out.println("Updating of Note: ");
         HashMap<String, String> headers = setHeaders(user);
         node.put("content", newText);
@@ -79,7 +79,7 @@ public class NotesService {
     }
 
     public void deleteNote(UserDto user, NoteDto note) throws IOException {
-        String url = Constant.getNotesURL + "/" + note.getId();
+        String url = Constant.GET_NOTES_URL + "/" + note.getId();
         HashMap<String, String> headers = setHeaders(user);
         execute.delete(url, headers);
         System.out.println("Note was deleted");
