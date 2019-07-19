@@ -60,7 +60,7 @@ public class NotesService {
         String url = Constant.GET_NOTES_URL + "/" + note.getId();
         System.out.println("Your notes is: ");
         note = mapper.readValue(execute.get(url, headers), NoteDto.class);
-        System.out.println(note);
+        System.out.println(note.getNoteData());
         return note;
     }
 

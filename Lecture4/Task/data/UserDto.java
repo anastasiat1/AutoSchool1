@@ -1,11 +1,11 @@
 package data;
 
 public class UserDto {
-    String email;
-    String password;
-    String id;
-    String registeredAt;
-    String usersToken;
+    private String email;
+    private String password;
+    private String id;
+    private String registeredAt;
+    private String usersToken;
 
     public String getToken() {
         return usersToken;

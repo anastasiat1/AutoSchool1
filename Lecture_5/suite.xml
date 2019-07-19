@@ -1,0 +1,20 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="testNGSuit">
+    <listeners>
+        <listener class-name="Utils.Listener" />
+    </listeners>
+    <parameter name="name" value="Fooo" />
+    <parameter name="weight" value="3.0" />
+    <test name="test">
+        <groups>
+            <run>
+                <include name="testSweets"/>
+                <include name="other"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="NewTest" />
+        </classes>
+    </test>
+</suite>
