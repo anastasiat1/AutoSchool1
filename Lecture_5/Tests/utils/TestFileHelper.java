@@ -1,4 +1,4 @@
-package Utils;
+package utils;
 
 import manipulationsWithSweets.SweetsFactory;
 import sweets.Sweets;

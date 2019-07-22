@@ -28,7 +28,7 @@ public class GiftBox {
         gift.log("\n");
         gift.log("Sorted sweets by cost: ");
         Collections.sort(gift.getSweets());
-        gift.printListOfSweets();
+        gift.printListOfSweets(gift.getSweets());
         gift.log("\n");
         ManipulationsWithFile.writeListOfSweetsToFile(gift.getSweets());
         gift.log("\n");

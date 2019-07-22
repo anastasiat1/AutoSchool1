@@ -2,7 +2,7 @@
 
 <suite name="testNGSuit">
     <listeners>
-        <listener class-name="Utils.Listener" />
+        <listener class-name="utils.Listener" />
     </listeners>
     <parameter name="name" value="Fooo" />
     <parameter name="weight" value="3.0" />
@@ -14,7 +14,9 @@
             </run>
         </groups>
         <classes>
-            <class name="NewTest" />
+            <class name="tests.SweetsCreation" />
+            <class name="tests.SweetsFinding" />
+            <class name="tests.SweetsWeightCalculation" />
         </classes>
     </test>
 </suite>

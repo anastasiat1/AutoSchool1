@@ -5,6 +5,7 @@ import exceptions.NullSumException;
 import sweets.*;
 import utils.ManipulationsWithFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Gift {
@@ -14,14 +15,12 @@ public class Gift {
         sweets = ManipulationsWithFile.createListOfSweetsFromFile();
     }
 
-    public Sweets findSweetByName(String name, double weight, List<Sweets> sweets) throws NoSuchElementInCollectionException {
-        Sweets result = null;
+    public List<Sweets> findSweetByName(String name, double weight, List<Sweets> sweets) throws NoSuchElementInCollectionException {
+        List <Sweets> result = new ArrayList<>();
         try {
             for (Sweets sweet : sweets) {
                 if (sweet.getName().equals(name) && sweet.getWeight() == weight) {
-                    result = sweet;
-                    System.out.println(result);
-                    return result;
+                    result.add(sweet);
                 }
             }
             if (result == null) {
@@ -30,6 +29,7 @@ public class Gift {
         } catch (IllegalArgumentException illegalArgument) {
             System.out.println("Please, set valid parameters to search");
         }
+        printListOfSweets(result);
         return result;
     }
 
@@ -50,9 +50,9 @@ public class Gift {
         return result;
     }
 
-    public void printListOfSweets() {
+    public void printListOfSweets(List<Sweets> sweets) {
         for (Sweets mc : sweets) {
-            System.out.print(mc);
+            System.out.println(mc);
         }
         System.out.println();
     }

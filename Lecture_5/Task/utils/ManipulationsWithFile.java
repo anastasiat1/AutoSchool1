@@ -50,7 +50,7 @@ public class ManipulationsWithFile {
         List sweetList = createListOfSweetsFromFile();
         System.out.println("Your giftbox contains: ");
         for (Object mc : sweetList) {
-            System.out.print(mc);
+            System.out.println(mc);
         }
         System.out.println();
     }
