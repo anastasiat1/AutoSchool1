@@ -1,16 +1,13 @@
 package utils;
 
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class Utils {
 
-    private static WebDriver driver;
-
-    public Utils(WebDriver driver) {
-        this.driver = driver;
-    }
-
-    public void setFullScreen(){
-        driver.manage().window().fullscreen();
+    public int chooseRandomElement(List<WebElement> category){
+        int index = (int) (Math.random() * category.size());
+        return index;
     }
 }
