@@ -8,6 +8,7 @@ public class DriverManagerFactory {
 
     public static WebDriver driver;
 
+
     public static WebDriver getDriver() {
         if (driver == null) {
             switch (System.getProperty("browser")) {
@@ -23,7 +24,7 @@ public class DriverManagerFactory {
                     throw new IllegalArgumentException("Specified browser is not supported!");
             }
         }
-            return driver;
+        return driver;
     }
 
     public static void quitDriver() {
