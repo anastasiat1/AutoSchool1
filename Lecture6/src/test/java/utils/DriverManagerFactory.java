@@ -8,16 +8,15 @@ public class DriverManagerFactory {
 
     public static WebDriver driver;
 
-
     public static WebDriver getDriver() {
         if (driver == null) {
             switch (System.getProperty("browser")) {
                 case "chrome":
-                    System.setProperty("webdriver.chrome.driver", "chromedriver");
+                    System.setProperty(Constant.CHROME_DRIVER, "chromedriver");
                     driver = new ChromeDriver();
                     break;
                 case "firefox":
-                    System.setProperty("webdriver.gecko.driver", "geckodriver");
+                    System.setProperty(Constant.FIREFOX_DRIVER, "geckodriver");
                     driver = new FirefoxDriver();
                     break;
                 default:

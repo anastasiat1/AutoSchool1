@@ -2,32 +2,23 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import utils.Constant;
+import buisnessObjects.Product;
 import utils.Utils;
 
 import java.util.List;
 
 public class ProductsCatalogPage extends BasicPage{
 
-    public ProductsCatalogPage() {
-    }
+    private static final String CLASSNAME_GROUPS_OF_PRODUCTS = "schema-product__group";
+    private static final String XPATH_CATALOG_PRODUCT_NAME = "//span[@data-bind='html: product.extended_name || product.full_name']";
+    private static final String XPATH_PRODUCT = "//a[@class=\"schema-product__button button button_orange\"]";
 
-    private WebElement chooseRandomProductFromCatalog(){
-        List<WebElement> products = driver.findElements(By.className(Constant.CLASSNAME_GROUPS_OF_PRODUCTS));
-        WebElement product = products.get(Utils.chooseRandomElement(products));
-        return product;
-    }
-
-    public String getNameOfProductFromCatalog(){
-        WebElement nameElement = chooseRandomProductFromCatalog().findElement(By.xpath(Constant.XPATH_CATALOG_PRODUCT_NAME));
-        return nameElement.getText();
-    }
-
-    public ProductPage getRandomProductFromCatalog(){
-        WebElement productBtn = chooseRandomProductFromCatalog().findElement(By.xpath(Constant.XPATH_PRODUCT));
-        productBtn.click();
+    public ProductPage chooseRandomProductFromCatalog(){
+        List<WebElement> products = driver.findElements(By.className(CLASSNAME_GROUPS_OF_PRODUCTS));
+        WebElement product = products.get(Utils.getRandomIndex(products));
+        String nameElement = product.findElement(By.xpath(XPATH_CATALOG_PRODUCT_NAME)).getText();
+        Product.createObject(nameElement);
+        product.findElement(By.xpath(XPATH_PRODUCT)).click();
         return new ProductPage();
     }
-
-
 }

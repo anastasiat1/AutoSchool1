@@ -1,3 +1,4 @@
+import buisnessObjects.Product;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -19,21 +20,15 @@ public class TestOnliner extends DriverManagerFactory {
     public void testAddNewProductToCart() {
         MainPage mainPage = new MainPage();
         mainPage.openOnlinerShop();
-        LoginPage loginPage = mainPage.openLoginPage();
-        loginPage.login(Constant.EMAIL, Constant.PASSWORD);
+        mainPage.openLoginPage()
+                .login(Constant.EMAIL, Constant.PASSWORD);
         ChaptersCatalogPage chaptersCatalogPage = mainPage.openCatalog();
-        ProductsCatalogPage productsCatalogPage = chaptersCatalogPage.chooseRandomCategory();
-        String productName = productsCatalogPage.getNameOfProductFromCatalog();
-        ProductPage productPage = productsCatalogPage.getRandomProductFromCatalog();
+        ProductPage productPage = chaptersCatalogPage.chooseRandomCategory()
+                .chooseRandomProductFromCatalog();
         productPage.chooseRandomOffer();
         CartPage cartPage = productPage.openCart();
         List<WebElement> productsFromCart = cartPage.getProductsFromCart();
-        for (WebElement productCart : productsFromCart) {
-            productCart = cartPage.getProductInfoFromCart();
-            String nameOfProductFromCart = productCart.getText();
-            if (nameOfProductFromCart.equals(productName)) {
-                Assert.assertEquals(nameOfProductFromCart, productName);
-            }
-        }
+        Product newProduct = Product.getFirstProduct();
+        Assert.assertTrue(cartPage.isProductPresent(productsFromCart, newProduct.getName()));
     }
 }
