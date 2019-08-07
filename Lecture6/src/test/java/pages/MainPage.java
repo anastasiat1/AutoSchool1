@@ -9,7 +9,7 @@ public class MainPage extends BasicPage{
     private static final String CSS_SELECTOR_LOGIN_BTN_ON_MAIN_PAGE = ".auth-bar__item--text";
     private static final String XPATH_OPEN_CATALOG_BTN = "//a[@href='https://catalog.onliner.by/']";
 
-    public void openOnlinerShop(){
+    public MainPage(){
         driver.get(Constant.ONLINER_URL);
     }
 

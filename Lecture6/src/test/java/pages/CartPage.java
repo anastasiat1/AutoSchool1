@@ -22,6 +22,7 @@ public class CartPage extends BasicPage {
             String nameOfProductFromCart = productCart.findElement(By.xpath(XPATH_CART_PRODUCT_INFO)).getText();
             if (nameFromCatalog.contains(nameOfProductFromCart)) {
                 contains = true;
+                break;
             }
         }
         return contains;

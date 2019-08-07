@@ -15,7 +15,7 @@ public class ProductsCatalogPage extends BasicPage{
 
     public ProductPage chooseRandomProductFromCatalog(){
         List<WebElement> products = driver.findElements(By.className(CLASSNAME_GROUPS_OF_PRODUCTS));
-        WebElement product = products.get(Utils.getRandomIndex(products));
+        WebElement product = products.get(Utils.getRandomIndex(0, products.size()));
         String nameElement = product.findElement(By.xpath(XPATH_CATALOG_PRODUCT_NAME)).getText();
         Product.createObject(nameElement);
         product.findElement(By.xpath(XPATH_PRODUCT)).click();

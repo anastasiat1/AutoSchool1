@@ -7,7 +7,7 @@ public class Product {
     private String name;
     private static List<Product> list = new ArrayList<>();
 
-    public Product() {
+    private Product(){
     }
 
     public static void createObject(String name){
