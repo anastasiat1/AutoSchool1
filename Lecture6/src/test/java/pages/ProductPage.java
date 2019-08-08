@@ -15,7 +15,7 @@ public class ProductPage extends BasicPage{
     public void chooseRandomOffer(){
         wait.until(ExpectedConditions.presenceOfElementLocated(By.className(CLASSNAME_OFFERS_LIST)));
         List<WebElement> cartBtn = driver.findElements(By.className(CLASSNAME_OFFERS_LIST));
-        cartBtn.get(Utils.getRandomIndex(0, cartBtn.size())).click();
+        cartBtn.get(Utils.getRandomIndex(0, cartBtn.size()-1)).click();
     }
 
     public CartPage openCart(){

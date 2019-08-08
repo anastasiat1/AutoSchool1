@@ -14,10 +14,10 @@ public class LoginPage extends BasicPage {
     @FindBy(css = "button.auth-button[type=submit]")
     private WebElement submitBtn;
 
-    public MainPage login(String email, String password, MainPage mainPage) {
+    public MainPage login(String email, String password) {
         inputEmail.sendKeys(email);
         inputPassword.sendKeys(password);
         submitBtn.submit();
-        return mainPage;
+        return new MainPage();
     }
 }

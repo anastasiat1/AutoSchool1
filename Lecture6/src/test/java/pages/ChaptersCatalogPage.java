@@ -18,14 +18,14 @@ public class ChaptersCatalogPage extends BasicPage {
 
     public ProductsCatalogPage chooseRandomCategory() {
         List<WebElement> globalCategory = driver.findElements(By.className(CLASSNAME_GLOBAL_CATEGORY));
-        globalCategory.get(Utils.getRandomIndex(0, globalCategory.size())).click();
+        globalCategory.get(Utils.getRandomIndex(0, globalCategory.size()-1)).click();
         WebElement selectedCatalogBlock = driver.findElement(By.xpath(XPATH_GLOBAL_CATEGORY_BLOCK));
         List<WebElement> asideCategory = selectedCatalogBlock.findElements(By.xpath(XPATH_ASIDE_CATEGORY));
-        builder.moveToElement(asideCategory.get(Utils.getRandomIndex(0, asideCategory.size()))).build().perform();
+        builder.moveToElement(asideCategory.get(Utils.getRandomIndex(0, asideCategory.size()-1))).build().perform();
         WebElement activeCategory = driver.findElement(By.xpath(XPATH_ASIDE_CATEGORY_ITEM));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_DROPDOWN_CATEGORY)));
         List<WebElement> activeCategoryChapters = activeCategory.findElements(By.xpath(XPATH_DROPDOWN_ITEM));
-        wait.until(ExpectedConditions.elementToBeClickable(activeCategoryChapters.get(Utils.getRandomIndex(0, activeCategoryChapters.size())))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(activeCategoryChapters.get(Utils.getRandomIndex(0, activeCategoryChapters.size()-1)))).click();
         return new ProductsCatalogPage();
     }
 }

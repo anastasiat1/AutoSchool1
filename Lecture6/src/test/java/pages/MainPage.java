@@ -10,7 +10,9 @@ public class MainPage extends BasicPage{
     private static final String XPATH_OPEN_CATALOG_BTN = "//a[@href='https://catalog.onliner.by/']";
 
     public MainPage(){
-        driver.get(Constant.ONLINER_URL);
+        System.out.println(driver.getCurrentUrl());
+        if(!driver.getCurrentUrl().equals(Constant.ONLINER_URL)){
+        driver.get(Constant.ONLINER_URL); }
     }
 
     public LoginPage openLoginPage() {

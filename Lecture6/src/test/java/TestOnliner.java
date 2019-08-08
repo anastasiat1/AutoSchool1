@@ -20,7 +20,7 @@ public class TestOnliner extends DriverManagerFactory {
     public void testAddNewProductToCart() {
         MainPage mainPage = new MainPage();
         ProductPage productPage = mainPage.openLoginPage()
-                .login(Constant.EMAIL, Constant.PASSWORD,mainPage)
+                .login(Constant.EMAIL, Constant.PASSWORD)
                 .openCatalog()
                 .chooseRandomCategory()
                 .chooseRandomProductFromCatalog();
